@@ -8,6 +8,7 @@ import (
 	"io/ioutil"
 	"os"
 	"path/filepath"
+	//"./clone"
 )
 
 type Payload struct {
@@ -29,6 +30,10 @@ type Result struct {
 }
 
 func main() {
+
+	//dir := clone.Clone("https://github.com/nls77/42logtime.git")
+	//fmt.Println(dir)
+
 	payload := &Payload{}
 	err := json.NewDecoder(os.Stdin).Decode(payload)
 
@@ -56,11 +61,11 @@ func main() {
 
 	// Execute the given command or run the code with
 	// the language runner if no command is given
-	if payload.Command == "" {
-		stdout, stderr, err = language.Run(payload.Language, filepaths, payload.Stdin)
+	if payload.Command == "" {   // if no command
+		stdout, stderr, err = language.Run(payload.Language, filepaths, payload.Stdin)      /// LANG
 	} else {
 		workDir := filepath.Dir(filepaths[0])
-		stdout, stderr, err = cmd.RunBashStdin(workDir, payload.Command, payload.Stdin)
+		stdout, stderr, err = cmd.RunBashStdin(workDir, payload.Command, payload.Stdin)        ///////////////// CMD
 	}
 	printResult(stdout, stderr, err)
 }
@@ -73,6 +78,7 @@ func writeFiles(files []*InMemoryFile) ([]string, error) {
 		return nil, err
 	}
 
+	fmt.Println (tmpPath)
 	paths := make([]string, len(files), len(files))
 	for i, file := range files {
 		path, err := writeFile(tmpPath, file)
